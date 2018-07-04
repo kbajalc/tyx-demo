@@ -1,0 +1,160 @@
+#################################################################################
+# TyX Demo
+#################################################################################
+
+service: tyx
+
+provider:
+  name: aws
+  region: us-east-1
+  stage: demo
+  runtime: nodejs8.10
+  memorySize: 1024
+  timeout: 30
+  
+  environment:
+    STAGE: ${self:service}-${opt:stage, self:provider.stage}
+    LOG_LEVEL: DEBUG
+    HTTP_SECRET: B05A23713F564A26983459FC612565B2
+    HTTP_TIMEOUT: 2h
+    HTTP_LIFETIME: 12h
+  
+functions:
+  step-0-function:
+    handler: lib/step-0.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
+  step-1-function:
+    handler: lib/step-1.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
+  step-2-function:
+    handler: lib/step-2.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
+  step-3-function:
+    handler: lib/step-3.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
+  step-4-function:
+    handler: lib/step-4.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
+  step-5-function:
+    handler: lib/step-5.handler
+    events:
+      - http:
+          path: graphql
+          method: GET
+          cors: true
+      - http:
+          path: graphql
+          method: POST
+          cors: true  
+      - http:
+          path: graphql/{authorization}
+          method: GET
+          cors: true    
+      - http:
+          path: graphql/{authorization}
+          method: POST
+          cors: true
+      - http:
+          path: graphiql
+          method: GET
+          cors: true
