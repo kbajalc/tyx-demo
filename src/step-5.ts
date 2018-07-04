@@ -1,4 +1,4 @@
-import { Context, Core, Field, Get, Public, Query, Service, Type } from 'tyx';
+import { Body, Command, Context, Core, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
 
 @Type()
 class CpuUsageInfo {
@@ -29,6 +29,19 @@ class ProcessInfo {
   @Field(Object) config: any;
 }
 
+@Input()
+class BmiRequest {
+  @Field() heigth: number;
+  @Field() weight: number;
+}
+
+@Type()
+class BmiRespose {
+  @Field() heigth: number;
+  @Field() weight: number;
+  @Field() bmi: number;
+}
+
 @Service()
 export class DemoService {
   @Public()
@@ -55,6 +68,14 @@ export class DemoService {
       versions: process.versions,
       config: process.config
     };
+  }
+
+  @Public()
+  @Post('/bmi')
+  @Command(req => BmiRequest, res => BmiRespose)
+  public bmi(@Body() req: BmiRequest): BmiRespose {
+    const res: BmiRespose = { ...req, bmi: req.weight / req.weight ** 2 };
+    return res;
   }
 }
 

@@ -33,6 +33,10 @@ functions:
           method: GET
           cors: true
       - http:
+          path: bmi
+          method: POST
+          cors: true
+      - http:
           path: graphql
           method: GET
           cors: true
