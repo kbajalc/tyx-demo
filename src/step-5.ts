@@ -1,4 +1,4 @@
-import { Context, Core, Field, Public, Query, Service, Type } from 'tyx';
+import { Context, Core, Field, Get, Public, Query, Service, Type } from 'tyx';
 
 @Type()
 class CpuUsageInfo {

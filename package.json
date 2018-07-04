@@ -14,17 +14,14 @@
     "start": "node lib/main",
     "clean": "rm -rf lib",
     "build": "rm -rf lib ; tsc -p .",
-    "watch": "rm -rf lib ; tsc -p . --watch"
+    "watch": "rm -rf lib ; tsc -p . --watch",
+    "deploy": "sls deploy"
   },
   "dependencies": {
-    "debug": "^3.1.0",
-    "tyx": "^0.1.49",
-    "uuid": "^3.3.2"
+    "tyx": "^0.1.50"
   },
   "devDependencies": {
-    "@types/debug": "0.0.30",
     "@types/node": "^7.0.66",
-    "aws-sdk": "^2.266.1",
     "serverless": "^1.28.0",
     "ts-node": "^7.0.0",
     "tslint": "^5.10.0",
