@@ -32,6 +32,7 @@ class ProcessInfo {
 @Service()
 export class DemoService {
   @Public()
+  @Get('/hello')
   @Query([void 0], String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
@@ -60,6 +61,8 @@ export class DemoService {
 if (require.main === module) {
   Core.init('Debug', true);
   Core.start(5000);
+} else {
+  Core.init('AWS', true);
 }
 
 export const handler = Core.lambda();
