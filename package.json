@@ -18,7 +18,7 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "tyx": "^0.1.51"
+    "tyx": "^0.1.52"
   },
   "devDependencies": {
     "@types/node": "^7.0.66",
@@ -26,6 +26,7 @@
     "ts-node": "^7.0.0",
     "tslint": "^5.10.0",
     "tslint-config-airbnb": "^5.9.2",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "uuid": "^3.3.2"
   }
 }

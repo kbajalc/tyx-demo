@@ -1,4 +1,4 @@
-import { Body, Command, Context, Core, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
+import { Any, Body, Command, Core, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
 
 @Type()
 class CpuUsageInfo {
@@ -31,15 +31,16 @@ class ProcessInfo {
 
 @Input()
 class BmiRequest {
-  @Field() height: number;
-  @Field() weight: number;
+  @Field(true) height: number;
+  @Field(true) weight: number;
 }
 
 @Type()
 class BmiRespose {
-  @Field() height: number;
-  @Field() weight: number;
-  @Field() bmi: number;
+  @Field(true) height: number;
+  @Field(true) weight: number;
+  @Field(true) bmi: number;
+  @Field(true) timestamp: Date;
 }
 
 @Service()
@@ -54,7 +55,7 @@ export class DemoService {
   @Public()
   @Get('/info')
   @Query([void 0], res => ProcessInfo)
-  public info(ctx: Context): ProcessInfo {
+  public info(): ProcessInfo {
     return {
       pid: process.pid,
       title: process.title,
@@ -71,10 +72,16 @@ export class DemoService {
   }
 
   @Public()
+  @Query([void 0], Any)
+  public untypedInfo(): ProcessInfo {
+    return this.info();
+  }
+
+  @Public()
   @Post('/bmi')
   @Command(req => BmiRequest, res => BmiRespose)
   public bmi(@Body() req: BmiRequest): BmiRespose {
-    const res: BmiRespose = { ...req, bmi: req.weight / req.height ** 2 };
+    const res: BmiRespose = { ...req, bmi: req.weight / req.height ** 2, timestamp: new Date() };
     return res;
   }
 }
