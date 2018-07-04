@@ -31,13 +31,13 @@ class ProcessInfo {
 
 @Input()
 class BmiRequest {
-  @Field() heigth: number;
+  @Field() height: number;
   @Field() weight: number;
 }
 
 @Type()
 class BmiRespose {
-  @Field() heigth: number;
+  @Field() height: number;
   @Field() weight: number;
   @Field() bmi: number;
 }
@@ -74,7 +74,7 @@ export class DemoService {
   @Post('/bmi')
   @Command(req => BmiRequest, res => BmiRespose)
   public bmi(@Body() req: BmiRequest): BmiRespose {
-    const res: BmiRespose = { ...req, bmi: req.weight / req.weight ** 2 };
+    const res: BmiRespose = { ...req, bmi: req.weight / req.height ** 2 };
     return res;
   }
 }
