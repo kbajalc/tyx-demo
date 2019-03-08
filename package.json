@@ -18,15 +18,15 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "tyx": "^0.1.53"
+    "tyx": "^0.1.74"
   },
   "devDependencies": {
-    "@types/node": "^7.0.66",
-    "serverless": "^1.28.0",
-    "ts-node": "^7.0.0",
-    "tslint": "^5.10.0",
-    "tslint-config-airbnb": "^5.9.2",
-    "typescript": "^2.9.2",
+    "@types/node": "^7.10.5",
+    "serverless": "^1.38.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.13.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.3.3333",
     "uuid": "^3.3.2"
   }
 }

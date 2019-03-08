@@ -87,6 +87,7 @@ export class DemoService {
 }
 
 if (require.main === module) {
+  // Core.schema.write('schema/step-5.gql');
   Core.init('Debug', true);
   Core.start(5000);
 } else {
