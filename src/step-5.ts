@@ -1,4 +1,4 @@
-import { Any, Body, Command, Core, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
+import { Any, Body, Command, Core, CoreServer, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
 
 @Type()
 class CpuUsageInfo {
@@ -87,9 +87,9 @@ export class DemoService {
 }
 
 if (require.main === module) {
-  // Core.schema.write('schema/step-5.gql');
+  Core.schema.write('schema/step-5.gql');
   Core.init('Debug', true);
-  Core.start(5000);
+  CoreServer.start(5000);
 } else {
   Core.init('AWS', true);
 }

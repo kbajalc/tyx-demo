@@ -16,6 +16,19 @@
       "outFiles": [
         "${workspaceRoot}/lib/**/*.js"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "DEMO Step",
+      "program": "${workspaceRoot}/src/step-6.ts",
+      "cwd": "${workspaceRoot}",
+      "sourceMaps": true,
+      "preLaunchTask": "watch",
+      "showAsyncStacks": true,
+      "outFiles": [
+        "${workspaceRoot}/lib/**/*.js"
+      ]
     }
   ]
 }

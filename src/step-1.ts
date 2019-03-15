@@ -1,4 +1,4 @@
-import { Core, Public, Query, Service } from 'tyx';
+import { Core, CoreServer, Public, Query, Service } from 'tyx';
 
 @Service()
 export class DemoService {
@@ -11,7 +11,7 @@ export class DemoService {
 
 if (require.main === module) {
   Core.init('Debug', true);
-  Core.start(5000);
+  CoreServer.start(5000);
 } else {
   Core.init('AWS', true);
 }

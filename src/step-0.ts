@@ -1,8 +1,8 @@
-import { Core } from 'tyx';
+import { Core, CoreServer } from 'tyx';
 
 if (require.main === module) {
   Core.init('Debug', true);
-  Core.start(5000);
+  CoreServer.start(5000);
 } else {
   Core.init('AWS', true);
 }

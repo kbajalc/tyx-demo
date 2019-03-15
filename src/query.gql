@@ -1,0 +1,73 @@
+{
+  ExtendedApi_info{
+    requestId
+  }
+  ExtendedApi_chao
+  ChildService_hello
+  ChildService_hello2
+  
+  Core {
+      name
+      services {
+        mode
+        id
+        type
+        global
+        transient
+  type
+        value
+      }
+    }
+  Metadata {
+    ApiMetadata {
+      target
+      name
+      alias
+      owner {
+        target
+      }
+      services {
+        target
+      }
+      base {
+        target
+      }
+      methods {
+        name
+        base {
+          name
+        }
+      }
+    }
+    ServiceMetadata {
+      name
+      alias
+      base {target}
+      final
+      inline
+      api {
+        name
+      }
+      activator {
+        base {name inline}
+      }
+      # base {
+      #   name
+      # }
+      # handlers {
+      #   service
+      #   method
+      #   target
+      # }
+    }
+
+    # DecorationMetadata(target: "BaseService") {
+    #   ordinal
+    #   decorator
+    #   target
+    #   propertyKey
+    #   index
+    #   args
+    # }
+  }
+}

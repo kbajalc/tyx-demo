@@ -15,16 +15,23 @@
     "clean": "rm -rf lib",
     "build": "rm -rf lib ; tsc -p .",
     "watch": "rm -rf lib ; tsc -p . --watch",
+    "clinic:doctor": "clinic doctor --autocannon [ /local/info -c100 -d10 ] -- node lib/step-6.js",
+    "clinic:flame": "clinic flame --autocannon [ /local/info -c100 -d10 ] -- node lib/step-6.js",
+    "clinic:bubble": "clinic bubbleprof --autocannon [ /local/info -c100 -d10 ] -- node lib/step-6.js",
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "tyx": "^0.1.74"
+    "tyx": "^0.1.85"
   },
   "devDependencies": {
     "@types/node": "^7.10.5",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
+    "raw-body": "^2.3.3",
     "serverless": "^1.38.0",
+    "serverless-offline": "^4.8.1",
     "ts-node": "^7.0.1",
-    "tslint": "^5.13.1",
+    "tslint": "^5.14.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.3.3333",
     "uuid": "^3.3.2"

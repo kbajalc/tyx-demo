@@ -1,0 +1,583 @@
+# -- Scalars --
+scalar Date
+scalar Time
+scalar DateTime
+scalar JSON
+scalar ANY
+
+# -- Directives --
+directive @metadata on OBJECT
+directive @input on INPUT_OBJECT
+directive @type on OBJECT
+directive @entity on OBJECT
+directive @expression on INPUT_OBJECT
+directive @auth(api: String, method: String, roles: JSON) on FIELD_DEFINITION
+directive @crud(auth: JSON) on FIELD_DEFINITION
+directive @transient on FIELD_DEFINITION
+directive @relation(type: RelationType) on FIELD_DEFINITION
+
+# -- Roots --
+schema {
+  query: Query
+  mutation: Mutation
+}
+type Query {
+  Metadata: MetadataRegistry
+  Core: CoreInfo
+}
+type Mutation {
+  ping(input: ANY): ANY
+}
+
+# -- Enums --
+enum RelationType {
+  OneToOne,
+  OneToMany,
+  ManyToOne,
+  ManyToMany
+}
+
+# -- API: BaseService -- #
+extend type Query {
+  BaseService_hello: String @auth(api: "BaseService", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+
+# -- API: ChildService -- #
+extend type Query {
+  ChildService_hello2: String @auth(api: "ChildService", method: "hello2", roles: { Internal: true, External: true, Remote: true, Public: true })
+  ChildService_hello: String @auth(api: "ChildService", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+
+
+
+# -- API: DemoApi -- #
+extend type Query {
+  DemoApi_hello: String @auth(api: "DemoApi", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+  DemoApi_info: ProcessInfo @auth(api: "DemoApi", method: "info", roles: { Internal: true, External: true, Remote: true, Public: true })
+  DemoApi_untypedInfo: ANY @auth(api: "DemoApi", method: "untypedInfo", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+extend type Mutation {
+  DemoApi_bmi(req: BmiRequest!): BmiRespose @auth(api: "DemoApi", method: "bmi", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+
+# -- API: ExtendedApi -- #
+extend type Query {
+  ExtendedApi_chao: String @auth(api: "ExtendedApi", method: "chao", roles: { Internal: true, External: true, Remote: true, Public: true })
+  ExtendedApi_ping: String @auth(api: "ExtendedApi", method: "ping", roles: { Internal: true, External: false, Remote: true })
+  ExtendedApi_hello: String @auth(api: "ExtendedApi", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+  ExtendedApi_info: ProcessInfo @auth(api: "ExtendedApi", method: "info", roles: { Internal: true, External: true, Remote: true, Public: true })
+  ExtendedApi_untypedInfo: ANY @auth(api: "ExtendedApi", method: "untypedInfo", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+extend type Mutation {
+  ExtendedApi_bmi(req: BmiRequest!): BmiRespose @auth(api: "ExtendedApi", method: "bmi", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+
+# -- API: SimpleService -- #
+extend type Query {
+  SimpleService_hello: String @auth(api: "SimpleService", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+}
+
+# -- Input: BmiRequest --
+input BmiRequest @input {
+  height: Float!
+  weight: Float!
+}
+# -- Type: BmiRespose --
+type BmiRespose @type {
+  height: Float!
+  weight: Float!
+  bmi: Float!
+  timestamp: Date!
+}
+# -- Type: CpuUsageInfo --
+type CpuUsageInfo @type {
+  user: Int
+  system: Int
+}
+# -- Type: MemoryUsageInfo --
+type MemoryUsageInfo @type {
+  rss: Int
+  heapTotal: Int
+  heapUsed: Int
+  external: Int
+}
+# -- Type: ProcessInfo --
+type ProcessInfo @type {
+  requestId: String
+  sourceIp: String
+  pid: Int
+  title: String
+  cwd: String
+  argv: [String]
+  arch: String
+  platform: String
+  uptime: Float
+  cpuUsage: CpuUsageInfo
+  memoryUsage: MemoryUsageInfo
+  versions: JSON
+  config: JSON
+}
+
+# -- Metadata Types --
+type ApiMetadata @metadata {
+  target: String
+  name: String
+  alias: String
+  owner: ServiceMetadata
+  base: ApiMetadata
+  publisher: ServiceMetadata
+  services(
+    target: String,
+    name: String,
+    final: Boolean,
+    alias: String,
+    inline: Boolean,
+    source: String
+  ): [ServiceMetadata]
+  methods(
+    target: String,
+    host: String,
+    name: String,
+    auth: String,
+    query: Boolean,
+    mutation: Boolean,
+    resolver: Boolean,
+    contentType: String,
+    source: String
+  ): [MethodMetadata]
+  routes(
+    target: String,
+    route: String,
+    handler: String,
+    verb: String,
+    resource: String,
+    model: String,
+    code: Int
+  ): [HttpRouteMetadata]
+  events(
+    target: String,
+    route: String,
+    handler: String,
+    source: String,
+    resource: String,
+    objectFilter: String,
+    actionFilter: String
+  ): [EventRouteMetadata]
+  source: String
+}
+type ColumnMetadata @metadata {
+  kind: String
+  name: String
+  required: Boolean
+  design: JSON
+  build: VarMetadata
+  target: String
+  entityMetadata: EntityMetadata
+  propertyName: String
+  type: String
+  precision: Int
+  scale: Int
+  length: String
+  width: Int
+  comment: String
+  isPrimary: Boolean
+  isNullable: Boolean
+  isGenerated: Boolean
+  isCreateDate: Boolean
+  isUpdateDate: Boolean
+  isVersion: Boolean
+  isVirtual: Boolean
+  isTransient: Boolean
+  generateStrategy: String
+}
+type CoreInfo @metadata {
+  name: String
+  services(
+    mode: String,
+    id: String,
+    type: String,
+    value: String,
+    global: Boolean,
+    transient: Boolean
+  ): [ServiceInfo]
+}
+type DatabaseMetadata @metadata {
+  target: String
+  alias: String
+  targets: [String]
+  entities: [EntityMetadata]
+  columns: [ColumnMetadata]
+  relations(
+    kind: String,
+    name: String,
+    required: Boolean,
+    target: String,
+    propertyName: String,
+    relationType: String
+  ): [RelationMetadata]
+}
+type DecorationMetadata @metadata {
+  decorator: String
+  ordinal: Int
+  target: String
+  prototype: Boolean
+  propertyKey: String
+  index: Int
+  args: JSON
+}
+type DecoratorMetadata @metadata {
+  decorator: String
+  count: Int
+  targets: [String]
+}
+type EntityMetadata @metadata {
+  kind: String
+  target: String
+  name: String
+  database: DatabaseMetadata
+  members(
+    kind: String,
+    name: String,
+    required: Boolean,
+    ref: String
+  ): [FieldMetadata]
+  columns: [ColumnMetadata]
+  primaryColumns: [ColumnMetadata]
+  relations(
+    kind: String,
+    name: String,
+    required: Boolean,
+    target: String,
+    propertyName: String,
+    relationType: String
+  ): [RelationMetadata]
+}
+type EnumMetadata @metadata {
+  kind: String
+  name: String
+  ref: String
+  options: [String]
+}
+type EventRouteMetadata @metadata {
+  target: String
+  api: ApiMetadata
+  method: MethodMetadata
+  base: EventRouteMetadata
+  over: EventRouteMetadata
+  service: ServiceMetadata
+  route: String
+  handler: String
+  source: String
+  resource: String
+  objectFilter: String
+  actionFilter: String
+}
+type FieldMetadata @metadata {
+  kind: String
+  name: String
+  required: Boolean
+  design: JSON
+  build: VarMetadata
+  ref: String
+  item: VarMetadata
+}
+type HandlerMetadata @metadata {
+  service: ServiceMetadata
+  base: ServiceMetadata
+  method: String
+  override: Boolean
+  target: String
+  source: String
+}
+type HttpBindingMetadata @metadata {
+  type: String
+  path: String
+  binder: String
+}
+type HttpRouteMetadata @metadata {
+  target: String
+  api: ApiMetadata
+  method: MethodMetadata
+  base: HttpRouteMetadata
+  over: HttpRouteMetadata
+  service: ServiceMetadata
+  route: String
+  handler: String
+  verb: String
+  resource: String
+  model: String
+  params: [String]
+  code: Int
+}
+type InjectMetadata @metadata {
+  service: ServiceMetadata
+  base: ServiceMetadata
+  resource: String
+  target: String
+  index: Int
+}
+type InputMetadata @metadata {
+  ref: String
+  kind: String
+  build: VarMetadata
+  item: VarMetadata
+}
+type MetadataRegistry @metadata {
+  RegistryMetadata(
+    kind: String,
+    name: String,
+    target: String
+  ): [TypeMetadata]
+  DecoratorMetadata(
+    decorator: String,
+    count: Int
+  ): [DecoratorMetadata]
+  DecorationMetadata(
+    decorator: String,
+    ordinal: Int,
+    target: String,
+    prototype: Boolean,
+    propertyKey: String,
+    index: Int
+  ): [DecorationMetadata]
+  ApiMetadata(
+    target: String,
+    name: String,
+    alias: String,
+    source: String
+  ): [ApiMetadata]
+  ServiceMetadata(
+    target: String,
+    name: String,
+    final: Boolean,
+    alias: String,
+    inline: Boolean,
+    source: String
+  ): [ServiceMetadata]
+  ProxyMetadata(
+    target: String,
+    name: String,
+    final: Boolean,
+    alias: String,
+    inline: Boolean,
+    application: String,
+    functionName: String,
+    source: String
+  ): [ProxyMetadata]
+  DatabaseMetadata(
+    target: String,
+    alias: String
+  ): [DatabaseMetadata]
+  EntityMetadata(
+    kind: String,
+    target: String,
+    name: String
+  ): [EntityMetadata]
+  ColumnMetadata(
+    kind: String,
+    name: String,
+    required: Boolean,
+    target: String,
+    propertyName: String,
+    type: String,
+    precision: Int,
+    scale: Int,
+    length: String,
+    width: Int,
+    comment: String,
+    isPrimary: Boolean,
+    isNullable: Boolean,
+    isGenerated: Boolean,
+    isCreateDate: Boolean,
+    isUpdateDate: Boolean,
+    isVersion: Boolean,
+    isVirtual: Boolean,
+    isTransient: Boolean,
+    generateStrategy: String
+  ): [ColumnMetadata]
+  RelationMetadata(
+    kind: String,
+    name: String,
+    required: Boolean,
+    target: String,
+    propertyName: String,
+    relationType: String
+  ): [RelationMetadata]
+  EnumMetadata(
+    kind: String,
+    name: String,
+    ref: String
+  ): [EnumMetadata]
+  InputMetadata(
+    kind: String,
+    name: String,
+    target: String
+  ): [TypeMetadata]
+  TypeMetadata(
+    kind: String,
+    name: String,
+    target: String
+  ): [TypeMetadata]
+  MethodMetadata(
+    target: String,
+    host: String,
+    name: String,
+    auth: String,
+    query: Boolean,
+    mutation: Boolean,
+    resolver: Boolean,
+    contentType: String,
+    source: String
+  ): [MethodMetadata]
+  ResolverMetadata(
+    target: String,
+    host: String,
+    name: String,
+    auth: String,
+    query: Boolean,
+    mutation: Boolean,
+    resolver: Boolean,
+    contentType: String,
+    source: String
+  ): [MethodMetadata]
+  HttpRouteMetadata(
+    target: String,
+    route: String,
+    handler: String,
+    verb: String,
+    resource: String,
+    model: String,
+    code: Int
+  ): [HttpRouteMetadata]
+  EventRouteMetadata(
+    target: String,
+    route: String,
+    handler: String,
+    source: String,
+    resource: String,
+    objectFilter: String,
+    actionFilter: String
+  ): [EventRouteMetadata]
+}
+type MethodMetadata @metadata {
+  target: String
+  api: ApiMetadata
+  base: ApiMetadata
+  host: String
+  name: String
+  design: JSON
+  auth: String
+  roles: JSON
+  query: Boolean
+  mutation: Boolean
+  resolver: Boolean
+  input: InputMetadata
+  result: ResultMetadata
+  select: JSON
+  contentType: String
+  bindings(
+    type: String,
+    path: String,
+    binder: String
+  ): [HttpBindingMetadata]
+  http(
+    target: String,
+    route: String,
+    handler: String,
+    verb: String,
+    resource: String,
+    model: String,
+    code: Int
+  ): [HttpRouteMetadata]
+  events: [EventRouteMetadata]
+  source: String
+}
+type ProxyMetadata @metadata {
+  target: String
+  name: String
+  final: Boolean
+  alias: String
+  inline: Boolean
+  api: ApiMetadata
+  base: ServiceMetadata
+  application: String
+  functionName: String
+  dependencies(
+    resource: String,
+    target: String,
+    index: Int
+  ): [InjectMetadata]
+  handlers(
+    method: String,
+    override: Boolean,
+    target: String,
+    source: String
+  ): [HandlerMetadata]
+  initializer: HandlerMetadata
+  selector: HandlerMetadata
+  activator: HandlerMetadata
+  releasor: HandlerMetadata
+  source: String
+}
+type RelationMetadata @metadata {
+  kind: String
+  name: String
+  required: Boolean
+  item: VarMetadata
+  design: JSON
+  build: VarMetadata
+  target: String
+  entityMetadata: EntityMetadata
+  propertyName: String
+  relationType: String
+  inverseEntityMetadata: EntityMetadata
+  inverseRelation: RelationMetadata
+  joinColumns: [ColumnMetadata]
+}
+type ResultMetadata @metadata {
+  ref: String
+  kind: String
+  build: VarMetadata
+  item: VarMetadata
+}
+type ServiceInfo @metadata {
+  mode: String
+  id: String
+  type: String
+  value: String
+  global: Boolean
+  transient: Boolean
+}
+type ServiceMetadata @metadata {
+  target: String
+  name: String
+  final: Boolean
+  alias: String
+  inline: Boolean
+  api: ApiMetadata
+  base: ServiceMetadata
+  dependencies: [InjectMetadata]
+  handlers: [HandlerMetadata]
+  initializer: HandlerMetadata
+  selector: HandlerMetadata
+  activator: HandlerMetadata
+  releasor: HandlerMetadata
+  source: String
+}
+type TypeMetadata @metadata {
+  kind: String
+  name: String
+  target: String
+  item: VarMetadata
+  members(
+    kind: String,
+    name: String,
+    required: Boolean,
+    ref: String
+  ): [FieldMetadata]
+}
+type VarMetadata @metadata {
+  ref: String
+  kind: String
+  item: VarMetadata
+}

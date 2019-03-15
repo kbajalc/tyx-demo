@@ -1,4 +1,4 @@
-import { Context, Core, Field, Public, Query, Service, Type } from 'tyx';
+import { Context, Core, CoreServer, Field, Public, Query, Service, Type } from 'tyx';
 
 @Type()
 class CpuUsageInfo {
@@ -58,7 +58,7 @@ export class DemoService {
 
 if (require.main === module) {
   Core.init('Debug', true);
-  Core.start(5000);
+  CoreServer.start(5000);
 } else {
   Core.init('AWS', true);
 }
