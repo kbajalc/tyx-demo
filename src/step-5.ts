@@ -47,14 +47,14 @@ class BmiRespose {
 export class DemoService {
   @Public()
   @Get('/hello')
-  @Query([void 0], String)
+  @Query(String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
 
   @Public()
   @Get('/info')
-  @Query([void 0], res => ProcessInfo)
+  @Query(res => ProcessInfo)
   public info(): ProcessInfo {
     return {
       pid: process.pid,
@@ -72,7 +72,7 @@ export class DemoService {
   }
 
   @Public()
-  @Query([void 0], Any)
+  @Query(Any)
   public untypedInfo(): ProcessInfo {
     return this.info();
   }

@@ -1,4 +1,4 @@
-import { Any, Context, Core, CoreServer, Public, Query, Service } from 'tyx';
+import { Any, Context, Core, CoreServer, CtxObject, Public, Query, Service } from 'tyx';
 
 interface CpuUsageInfo {
   user: number;
@@ -29,14 +29,14 @@ interface ProcessInfo {
 @Service()
 export class DemoService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
 
   @Public()
-  @Query([void 0], Any)
-  public info(ctx: Context): ProcessInfo {
+  @Query(Any)
+  public info(@CtxObject() ctx: Context): ProcessInfo {
     return {
       pid: process.pid,
       title: process.title,

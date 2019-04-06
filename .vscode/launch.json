@@ -21,7 +21,7 @@
       "type": "node",
       "request": "launch",
       "name": "DEMO Step",
-      "program": "${workspaceRoot}/src/step-6.ts",
+      "program": "${workspaceRoot}/src/step-7.ts",
       "cwd": "${workspaceRoot}",
       "sourceMaps": true,
       "preLaunchTask": "watch",

@@ -32,13 +32,13 @@ class ProcessInfo {
 @Service()
 export class DemoService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
 
   @Public()
-  @Query([void 0], res => ProcessInfo)
+  @Query(res => ProcessInfo)
   public info(ctx: Context): ProcessInfo {
     return {
       pid: process.pid,

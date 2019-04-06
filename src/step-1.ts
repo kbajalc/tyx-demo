@@ -3,7 +3,7 @@ import { Core, CoreServer, Public, Query, Service } from 'tyx';
 @Service()
 export class DemoService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
   }

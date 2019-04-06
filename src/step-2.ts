@@ -3,13 +3,13 @@ import { Any, Context, Core, CoreServer, Public, Query, Service } from 'tyx';
 @Service()
 export class DemoService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public hello(): string {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
 
   @Public()
-  @Query([void 0], Any)
+  @Query(Any)
   public info(ctx: Context): any {
     return {
       pid: process.pid,

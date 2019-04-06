@@ -41,6 +41,7 @@ enum RelationType {
 # -- API: DemoApi -- #
 extend type Query {
   DemoApi_hello: String @auth(api: "DemoApi", method: "hello", roles: { Internal: true, External: true, Remote: true, Public: true })
+  DemoApi_add(a: ANY!, b: ANY!): Float @auth(api: "DemoApi", method: "add", roles: { Internal: true, External: true, Remote: true, Public: true })
 }
 
 
@@ -69,6 +70,7 @@ type ApiMetadata @metadata {
   ): [ServiceMetadata]
   methods(
     target: String,
+    type: String,
     host: String,
     name: String,
     auth: String,
@@ -141,7 +143,8 @@ type CoreInfo @metadata {
     transient: Boolean
   ): [ServiceInfo]
   pool(
-    name: String
+    name: String,
+    state: String
   ): [InstanceInfo]
 }
 type DatabaseMetadata @metadata {
@@ -197,8 +200,8 @@ type EntityMetadata @metadata {
   ): [RelationMetadata]
 }
 type EnumMetadata @metadata {
-  kind: String
   name: String
+  kind: String
   ref: String
   options: [String]
 }
@@ -260,13 +263,18 @@ type InjectMetadata @metadata {
   index: Int
 }
 type InputMetadata @metadata {
-  ref: String
+  index: Int
+  name: String
   kind: String
+  design: String
+  ref: String
+  defined: Boolean
   build: VarMetadata
   item: VarMetadata
 }
 type InstanceInfo @metadata {
   name: String
+  state: String
   context(
     mode: String,
     id: String,
@@ -364,8 +372,8 @@ type MetadataRegistry @metadata {
     relationType: String
   ): [RelationMetadata]
   Enum(
-    kind: String,
     name: String,
+    kind: String,
     ref: String
   ): [EnumMetadata]
   Input(
@@ -380,6 +388,7 @@ type MetadataRegistry @metadata {
   ): [TypeMetadata]
   Method(
     target: String,
+    type: String,
     host: String,
     name: String,
     auth: String,
@@ -391,6 +400,7 @@ type MetadataRegistry @metadata {
   ): [MethodMetadata]
   ResolverMetadata(
     target: String,
+    type: String,
     host: String,
     name: String,
     auth: String,
@@ -421,6 +431,7 @@ type MethodMetadata @metadata {
   target: String
   api: ApiMetadata
   base: ApiMetadata
+  type: String
   host: String
   name: String
   design: JSON
@@ -429,7 +440,14 @@ type MethodMetadata @metadata {
   query: Boolean
   mutation: Boolean
   resolver: Boolean
-  input: InputMetadata
+  inputs(
+    index: Int,
+    name: String,
+    kind: String,
+    design: String,
+    ref: String,
+    defined: Boolean
+  ): [InputMetadata]
   result: ResultMetadata
   select: JSON
   contentType: String
@@ -472,6 +490,8 @@ type PackageInfo @metadata {
   ): [PackageInfo]
 }
 type ProcessInfo @metadata {
+  name: String
+  state: String
   timestamp: Date
   versions: ANY
   uptime: Float
@@ -540,8 +560,11 @@ type RelationMetadata @metadata {
   joinColumns: [ColumnMetadata]
 }
 type ResultMetadata @metadata {
-  ref: String
   kind: String
+  design: String
+  promise: Boolean
+  ref: String
+  defined: Boolean
   build: VarMetadata
   item: VarMetadata
 }

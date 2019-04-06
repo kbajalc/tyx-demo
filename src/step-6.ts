@@ -51,7 +51,7 @@ class BmiRespose {
 @Service()
 export class SimpleService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public async hello(): Promise<string> {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
@@ -60,16 +60,16 @@ export class SimpleService {
 @Api()
 export abstract class DemoApi {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public async hello(): Promise<string> { throw undefined; }
 
   @Public()
   @Get('/info')
-  @Query([void 0], res => ProcessInfo)
+  @Query(res => ProcessInfo)
   public async info(@ContextObject() ctx: Context): Promise<ProcessInfo> { throw undefined; }
 
   @Public()
-  @Query([void 0], Any)
+  @Query(Any)
   public async untypedInfo(ctx: Context): Promise<ProcessInfo> { throw undefined; }
 
   @Public()
@@ -84,11 +84,11 @@ export abstract class DemoApi {
 @Api()
 export abstract class ExtendedApi extends DemoApi {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public async chao(): Promise<string> { throw undefined; }
 
   @Schedule()
-  @Query([void 0], String)
+  @Query(String)
   public async ping(ctx: Context): Promise<string> { throw undefined; }
 }
 
@@ -98,11 +98,6 @@ export class ImplementationService implements ExtendedApi {
   @Handler()
   public async hello(): Promise<string> {
     return `[${new Date().toISOString()}] Hello world ...`;
-  }
-
-  @Handler()
-  public async add(a: number, b: number) {
-    return a + b;
   }
 
   @Handler()
@@ -152,7 +147,7 @@ export class ImplementationService implements ExtendedApi {
 @Service(false)
 export class BaseService {
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public async hello(): Promise<string> {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
@@ -177,7 +172,7 @@ export class ChildService extends BaseService {
   }
 
   @Public()
-  @Query([void 0], String)
+  @Query(String)
   public async hello2(): Promise<string> {
     return `[${new Date().toISOString()}] Hello world ...`;
   }
