@@ -5,7 +5,7 @@
   "version": "2.0.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "pwa-node",
       "request": "launch",
       "name": "DEMO Program",
       "program": "${file}",
@@ -18,7 +18,7 @@
       ]
     },
     {
-      "type": "node",
+      "type": "pwa-node",
       "request": "launch",
       "name": "DEMO Step",
       "program": "${workspaceRoot}/src/step-7.ts",

@@ -1,5 +1,7 @@
 import { Any, Context, Core, CoreServer, CtxObject, Public, Query, Service } from 'tyx';
 
+process.env.LOG_LEVEL = 'DEBUG';
+
 interface CpuUsageInfo {
   user: number;
   system: number;
@@ -54,10 +56,10 @@ export class DemoService {
 }
 
 if (require.main === module) {
-  Core.init('Debug', true);
+  Core.init({ application: 'Debug', crudAllowed: true });
   CoreServer.start(5000);
 } else {
-  Core.init('AWS', true);
+  Core.init({ application: 'AWS', crudAllowed: true });
 }
 
 export const handler = Core.lambda();

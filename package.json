@@ -21,7 +21,8 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "tyx": "^0.1.85"
+    "graphql": "^14.6.0",
+    "tyx": "^0.2.4"
   },
   "devDependencies": {
     "@types/node": "^7.10.5",

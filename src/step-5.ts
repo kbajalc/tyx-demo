@@ -1,5 +1,7 @@
 import { Any, Body, Command, Core, CoreServer, Field, Get, Input, Post, Public, Query, Service, Type } from 'tyx';
 
+process.env.LOG_LEVEL = 'DEBUG';
+
 @Type()
 class CpuUsageInfo {
   @Field(0) user: number;
@@ -87,11 +89,11 @@ export class DemoService {
 }
 
 if (require.main === module) {
-  Core.schema.write('schema/step-5.gql');
-  Core.init('Debug', true);
+  // Core.schema.write('schema/step-5.gql');
+  Core.init({ application: 'Debug', crudAllowed: true });
   CoreServer.start(5000);
 } else {
-  Core.init('AWS', true);
+  Core.init({ application: 'AWS', crudAllowed: true });
 }
 
 export const handler = Core.lambda();

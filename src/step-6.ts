@@ -1,7 +1,9 @@
 // Inheritance
 
 // tslint:disable-next-line:max-line-length
-import { Activate, Any, Api, Body, Command, Context, ContextObject, Core, CoreGraphQL, CoreServer, Field, Get, Handler, HttpRequest, HttpResponse, Input, Override, Post, Public, Query, Release, ResolverContext, Schedule, Service, Type, Utils } from 'tyx';
+import { Activate, Any, Api, Body, Command, Context, ContextObject, Core, CoreGraphQL, CoreServer, Field, Get, Handler, HttpRequest, HttpResponse, Input, Override, Post, Public, Query, Release, Schedule, Service, Type, Utils } from 'tyx';
+
+process.env.LOG_LEVEL = 'DEBUG';
 
 @Type()
 class CpuUsageInfo {
@@ -154,12 +156,12 @@ export class BaseService {
 
   @Activate()
   public activate() {
-    console.log('Activate:', Utils.label(this));
+    console.log('Activate:', Utils.toString(this));
   }
 
   @Release()
   public release() {
-    console.log('Release:', Utils.label(this));
+    console.log('Release:', Utils.toString(this));
   }
 }
 
@@ -182,25 +184,25 @@ export class ChildService extends BaseService {
 @Service(true)
 export class CustomGraphQL extends CoreGraphQL {
 
-  @Activate()
-  protected async activate(ctx: ResolverContext & Context, req: HttpRequest) {
-    console.log('Custom activation');
-    super.activate(ctx, req);
-  }
+  // @Activate()
+  // protected async activate(ctx: ResolverContext & Context, req: HttpRequest) {
+  //   console.log('Custom activation');
+  //   super.activate(ctx, req);
+  // }
 
   @Override()
   @Public()
   public async graphql(ctx: Context, req: HttpRequest): Promise<HttpResponse> {
-    return super.graphql(ctx, req);
+    return super.process(ctx, req);
   }
 }
 
 if (require.main === module) {
-  Core.schema.write('schema/step-6.gql');
-  Core.init('Debug');
+  // Core.schema.write('schema/step-6.gql');
+  Core.init({ application: 'Debug', crudAllowed: true });
   CoreServer.start(5000);
 } else {
-  Core.init('AWS', true);
+  Core.init({ application: 'Debug', crudAllowed: true });
 }
 
 export const handler = Core.lambda();

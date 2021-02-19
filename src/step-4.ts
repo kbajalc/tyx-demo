@@ -1,5 +1,7 @@
 import { Context, Core, CoreServer, Field, Public, Query, Service, Type } from 'tyx';
 
+process.env.LOG_LEVEL = 'DEBUG';
+
 @Type()
 class CpuUsageInfo {
   @Field(0) user: number;
@@ -15,14 +17,14 @@ class MemoryUsageInfo {
 }
 
 @Type()
-class ProcessInfo {
+class ResultInfo {
   @Field(0) pid: number;
   @Field() title: string;
   @Field() cwd: string;
   @Field([String]) argv: string[];
   @Field() arch: string;
   @Field() platform: string;
-  @Field() uptime: number;
+  @Field() wuptime: number;
   @Field(type => CpuUsageInfo) cpuUsage: CpuUsageInfo;
   @Field(type => MemoryUsageInfo) memoryUsage: MemoryUsageInfo;
   @Field(Object) versions: any;
@@ -38,8 +40,8 @@ export class DemoService {
   }
 
   @Public()
-  @Query(res => ProcessInfo)
-  public info(ctx: Context): ProcessInfo {
+  @Query(res => ResultInfo)
+  public info(ctx: Context): ResultInfo {
     return {
       pid: process.pid,
       title: process.title,
@@ -47,7 +49,7 @@ export class DemoService {
       argv: process.argv,
       arch: process.arch,
       platform: process.platform,
-      uptime: process.uptime(),
+      wuptime: process.uptime(),
       cpuUsage: process.cpuUsage(),
       memoryUsage: process.memoryUsage(),
       versions: process.versions,
@@ -57,10 +59,10 @@ export class DemoService {
 }
 
 if (require.main === module) {
-  Core.init('Debug', true);
+  Core.init({ application: 'Debug', crudAllowed: true });
   CoreServer.start(5000);
 } else {
-  Core.init('AWS', true);
+  Core.init({ application: 'AWS', crudAllowed: true });
 }
 
 export const handler = Core.lambda();

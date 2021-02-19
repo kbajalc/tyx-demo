@@ -1,6 +1,8 @@
 // tslint:disable-next-line:max-line-length
 import { Activate, Api, ArgParam, Context, Core, CoreServer, Ctx, CtxObject, Entity, Get, Handler, Inject, Override, PrimaryIdColumn, Public, Query, Release, Service } from 'tyx';
 
+process.env.LOG_LEVEL = 'DEBUG';
+
 @Entity()
 export class Test {
   @PrimaryIdColumn()
@@ -105,13 +107,13 @@ async function proxy() {
 }
 
 if (require.main === module) {
-  Core.schema.write('schema/step-7.gql');
-  Core.init('Debug', true);
+  // Core.schema.write('schema/step-7.gql');
+  Core.init({ application: 'Debug', crudAllowed: true });
   CoreServer.start(5000);
   console.log(Core.processInfo());
   proxy();
 } else {
-  Core.init('AWS', true);
+  Core.init({ application: 'AWS', crudAllowed: true });
 }
 
 export const handler = Core.lambda();
